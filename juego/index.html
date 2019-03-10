@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="phaser2.min.js"></script>
+    <script src="Boot.js"></script>
+    <script src="Preloader.js"></script>
+    <script src="MainMenu.js"></script>
+    <script src="Violento.js"></script>
+    <script src="No_violento.js"></script>
+    <script src="Edad.js"></script>
+    <script src="Settings.js"></script>
+    <script src="Tutorial_Violento.js"></script>
+    <script src="Tutorial_No_Violento.js"></script>
+    <script src="Elegir_nave.js"></script>
+   <!--<script src="Battle_Online.js"></script>
+    <script src="Battle_Offline.js"></script>
+    <script src="Tutorial.js"></script>
+	<script src="Esperar_jugador.js"></script>-->
+
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Srisakdi" rel="stylesheet">
+	<style>
+		body{
+			margin:0px;
+			padding:0px;
+			font-family: 'Press Start 2P';
+		}
+		@font-face {
+			font-family: 'Press Start 2P';
+			font-size 50px
+			src: url("assets/fonts/PressStart2P-Regular.ttf");
+		}
+		body, html {
+			height: 100%;
+			margin: 0;
+		}
+
+		.bg {
+			/* The image used */
+			background-image: url("assets/Backgrounds/recreativa.jpg");
+
+			/* Full height */
+			height: 100%; 
+
+			/* Center and scale the image nicely */
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	</style>
+
+</head>
+<body>
+	<div class="bg" style="font-family:'Press Start 2P';">
+    <script>
+		var preg=0;
+		var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'Space invaders');
+		window.onload = function(){
+
+		game.state.add('Boot',Game.Boot);
+		game.state.add('Preloader',Game.Preloader);
+		game.state.add('MainMenu',Game.MainMenu);
+		game.state.add('Edad',Game.Edad);
+		game.state.add('Violento',Game.Violento);
+		game.state.add('No_Violento',Game.No_Violento);
+		game.state.add('Settings',Game.Settings);
+		game.state.add('Tutorial_Violento',Game.Tutorial_Violento);
+		game.state.add('Tutorial_No_Violento',Game.Tutorial_No_Violento);
+		game.state.add('Elegir_nave',Game.Elegir_nave);
+		/*game.state.add('Battle_Offline',Game.Battle_Offline);
+		game.state.add('Battle_Online',Game.Battle_Online);
+		game.state.add('Tutorial',Game.Tutorial);
+		game.state.add('Esperar_jugador',Game.Esperar_jugador);*/
+		game.state.start('Boot');
+		};
+    </script>
+	</div>
+</body>
+</html>
+
+
+
+
+
