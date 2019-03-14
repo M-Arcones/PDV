@@ -31,14 +31,14 @@ Game.MainMenu.prototype ={
 		this.button_no_violento.scale.setTo(2.4, 0.9);
 		this.button_no_violento.stage='No_Violento';
 		this.text2=this.game.add.text(0, 0, "Juego No violento",style);
-		this.text2.font = 'Srisakdi';
+		this.text2.font = 'Press Start 2P';
 		this.text2.setTextBounds(0, 300, this.game.world.width,100);
 		
 		this.button_settings = this.add.button(this.world.centerX - 160, 405, 'Boton', this.click_button, this, 2, 1, 0);
 		this.button_settings.scale.setTo(1.4, 0.9);
 		this.button_settings.stage='Settings';
 		this.text2=this.game.add.text(0, 0, "Settings",style);
-		//this.text2.font = 'Press Start 2P';
+		this.text2.font = 'Press Start 2P';
 		this.text2.setTextBounds(0, 400, this.game.world.width,100);
 	},
 	update:function(){

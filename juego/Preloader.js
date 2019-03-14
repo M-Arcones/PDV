@@ -19,6 +19,7 @@ Game.Preloader.prototype={
 		this.load.image('Nave3', 'assets/sprites/nave3.png');
 		this.load.image('Life', 'assets/sprites/life.png');
 		this.load.image('Bala_invaders', 'assets/sprites/bala_invaders.png');
+		this.load.image('bala_nave_alien', 'assets/sprites/bala_nave_alien.png');
 		this.load.image('Bala_nave', 'assets/sprites/bala_nave.png');
 		this.load.image('Explosion', 'assets/sprites/explosion.png');
 		this.load.image('Barrera1', 'assets/sprites/barrera1.png');
@@ -26,8 +27,9 @@ Game.Preloader.prototype={
 		this.load.image('Barrera3', 'assets/sprites/barrera3.png');
 		this.load.image('Barrera4', 'assets/sprites/barrera4.png');
 		this.load.spritesheet('invader1', 'assets/sprites/invader1.png', 52, 52, 2);
-		this.load.spritesheet('invader2', 'assets/sprites/invader2.png', 122, 52, 2);
-		this.load.spritesheet('invader3', 'assets/sprites/invader3.png', 122, 52, 2);
+		this.load.spritesheet('invader2', 'assets/sprites/invader2.png', 52, 52, 2);
+		this.load.spritesheet('invader3', 'assets/sprites/invader3.png', 52, 52, 2);
+		this.load.spritesheet('nave_alien', 'assets/sprites/nave_alien.png', 192, 85, 2);
 		
         /*this.background = this.add.image(0, 0, "preloader_fondo");
         this.background.height = this.game.height;

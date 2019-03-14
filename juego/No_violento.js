@@ -10,6 +10,9 @@ var cursors;
 var explosions;
 var vidas;
 var TextoFinal;
+var puntuacion = 0;
+var TextoPuntos = 'Puntos : ';
+var TextoPuntuacion;
 
 
 Game.No_Violento.prototype ={
@@ -19,6 +22,7 @@ Game.No_Violento.prototype ={
 	},
 	
 	create:function(){
+		puntuacion = 0;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.stage.backgroundColor = "Black";
 
@@ -65,6 +69,8 @@ Game.No_Violento.prototype ={
 		enemigos3.physicsBodyType = Phaser.Physics.ARCADE;
 				
 		this.createAliens();
+		//  The score
+		TextoPuntuacion = game.add.text(10, 10, TextoPuntos + puntuacion, { font: '24px Press Start 2P', fill: '#fff' });
 
 		vidas = game.add.group();
 		game.add.text(game.world.width - 140, 10, 'Vidas: ', { font: '24px Press Start 2P', fill: '#fff' });
@@ -177,6 +183,7 @@ Game.No_Violento.prototype ={
 		enemigos3.y += 1;
 		
 		if (enemigos.getAt(1).body.y >=640){
+			puntuacion += 100;
 			enemigos.removeAll();
 			enemigos.y=0;
 			var hueco = Math.ceil(Math.random() * (2 - 6) + 6);
@@ -198,6 +205,7 @@ Game.No_Violento.prototype ={
 		}
 
 		if (enemigos1.getAt(1).body.y >=640){
+			puntuacion += 100;
 			enemigos1.removeAll();
 			enemigos1.y=0;
 			var hueco = Math.ceil(Math.random() * (2 - 6) + 6);
@@ -219,6 +227,7 @@ Game.No_Violento.prototype ={
 		}
 
 		if (enemigos2.getAt(1).body.y >=640){
+			puntuacion += 100;
 			enemigos2.removeAll();
 			enemigos2.y=0;
 			var hueco = Math.ceil(Math.random() * (2 - 6) + 6);
@@ -240,6 +249,7 @@ Game.No_Violento.prototype ={
 		}
 
 		if (enemigos3.getAt(1).body.y >=640){
+			puntuacion += 100;
 			enemigos3.removeAll();
 			enemigos3.y=0;
 			var hueco = Math.ceil(Math.random() * (2 - 6) + 6);
@@ -259,6 +269,7 @@ Game.No_Violento.prototype ={
 				alien.body.moves = false;
 			}
 		}
+		TextoPuntuacion.text = TextoPuntos + puntuacion;
 		if (nave.alive)
 		{
 			nave.body.velocity.setTo(0, 0);

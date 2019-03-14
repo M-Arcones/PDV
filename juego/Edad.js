@@ -6,7 +6,7 @@ Game.Edad.prototype ={
 	create:function(){
 		this.seleccion;
 		/*this.game.physics.p2.gravity.y = 0;*/
-        var style = {	font: "28px Press Start",
+        var style = {	font: "28px Press Start 2P",
 						fill: "White",
 						boundsAlignH: "center",
 						boundsAlignV: "middle",
@@ -25,11 +25,11 @@ Game.Edad.prototype ={
 		
 		
 		this.text1=this.game.add.text(0, 0, "Eres mayor de 13?",style);
-		this.text1.font = 'Srisakdi';
+		this.text1.font = 'Press Start 2P';
 		this.text2=this.game.add.text(140, 0, "Si",style);
-		this.text2.font = 'Press Start';
+		this.text2.font = 'Press Start 2P';
 		this.text3=this.game.add.text(-120, 0, "No",style);
-		this.text3.font = 'Press Start';
+		this.text3.font = 'Press Start 2P';
 		this.text1.setTextBounds(0, 200, this.game.world.width,100);
 		this.text2.setTextBounds(0, 300, this.game.world.width,100);
 		this.text3.setTextBounds(0, 300, this.game.world.width,100);

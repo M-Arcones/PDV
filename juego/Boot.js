@@ -14,6 +14,13 @@ Game.Boot.prototype = {
 	},
 	
 	create:function(){
+        var style = {	font: "26px Press Start 2P",
+						fill: "White",
+						boundsAlignH: "center",
+						boundsAlignV: "middle",
+					};
+		this.text1=this.game.add.text(0, 0, "",style);
+		this.text1.font = 'Press Start 2P';
 		//this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		//this.game.physics.p2.setImpactEvents(true);
