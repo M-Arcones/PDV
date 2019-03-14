@@ -68,6 +68,7 @@ Game.Violento.prototype ={
 		nave_alien = game.add.sprite(-50, -50, 'nave_alien');
 		game.physics.enable(nave_alien, Phaser.Physics.ARCADE);
 		nave_alien.scale.setTo(0.5,0.5);
+		nave_alien.tipo=1;
 		//nave_alien.vida=4;
 		
 		barrera1 = game.add.sprite(50, 400, 'Barrera1');
@@ -131,6 +132,9 @@ Game.Violento.prototype ={
 	},
 	
 	moverNaveAlien:function(){
+		if(nave_alien.alive==false){
+			nave_alien.revive();
+		}
 		Tiempo_nave_alien.destroy();
 		nave_alien.x = -10;
 		nave_alien.y = 10;
@@ -147,6 +151,7 @@ Game.Violento.prototype ={
 				enemigo.animations.add('fly', [ 0, 1], 3, true);
 				enemigo.play('fly');
 				enemigo.body.moves = false;
+				enemigo.tipo=0;
 			}
 		}
 
@@ -175,6 +180,7 @@ Game.Violento.prototype ={
 				enemigo.animations.add('fly', [ 0, 1], 3, true);
 				enemigo.play('fly');
 				enemigo.body.moves = false;
+				enemigo.tipo=0;
 			}
 		}
 
@@ -269,6 +275,7 @@ Game.Violento.prototype ={
 			
 			//colisones de enemigos con balas
 			game.physics.arcade.overlap(balas, enemigos, this.collisionHandler, null, this);
+			game.physics.arcade.overlap(balas, nave_alien, this.collisionHandler, null, this);
 			
 			//colisones propias con balas
 			game.physics.arcade.overlap(balasEnemigo, nave, this.enemyHitsPlayer, null, this);
@@ -321,10 +328,12 @@ Game.Violento.prototype ={
 	},
 	
 	collisionbar_player:function(nave, enemigos){
-
 		do{
 			live = vidas.getFirstAlive();
-			live.kill();
+			if (live)
+			{
+				live.kill();
+			}
 			nave.kill();
 		}while (vidas.countLiving()>1);
 		
@@ -390,8 +399,15 @@ Game.Violento.prototype ={
 
 		bullet.kill();
 		enemigo.kill();
-
-		puntuacion += 100;
+		if(enemigo.tipo==0){
+			puntuacion += 100;
+		}else{
+			puntuacion += 500;
+			Tiempo_nave_alien=this.time.create();
+			Tiempo1=Tiempo_nave_alien.add(Phaser.Timer.SECOND * 20, this.moverNaveAlien);
+			Tiempo_nave_alien.start();
+			control_tiempo=1;
+		}
 		TextoPuntuacion.text = TextoPuntos + puntuacion;
 
 		var explosion = explosions.getFirstExists(false);
@@ -430,9 +446,8 @@ Game.Violento.prototype ={
 	},
 
 	nave_alien_Fires:function() {
-
 		Balas_nave_alien = balas_nave_alien.getFirstExists(false);
-		if (Balas_nave_alien && nave_alien.body.x < 650 && nave_alien.body.y==10)
+		if (Balas_nave_alien && nave_alien.body.x < 650 && nave_alien.body.y==10 && nave_alien.alive)
 		{
 			Balas_nave_alien.reset(nave_alien.body.x+50, nave_alien.body.y);
 			Balas_nave_alien.body.velocity.y = 200;
@@ -441,11 +456,9 @@ Game.Violento.prototype ={
 	},
 
 	fireBullet:function() {
-
 		if (game.time.now > bulletTime)
 		{
 			bullet = balas.getFirstExists(false);
-
 			if (bullet)
 			{
 				bullet.reset(nave.x, nave.y + 8);
@@ -463,11 +476,10 @@ Game.Violento.prototype ={
 		this.state.start('MainMenu',true, false, valor_edad, tipo_nave);
 	},
 	render:function() {
-		game.debug.text('normal baddies: ' + enemigos.position.x, 16, 60);
+		game.debug.text('normal baddies: ' + nave_alien.alive, 16, 60);
 	}
 }
-	
-	
+
 	
 	
 	
