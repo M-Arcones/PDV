@@ -3,6 +3,10 @@ Game.Violento = function(game){
 
 var valor_edad;
 var tipo_nave;
+var rebote_bala;
+var Puntuacion_violento;
+var min_punutacion_violento;
+var Puntuacion_no_violento;
 
 var nave;
 var enemigos;
@@ -19,21 +23,29 @@ var enemyBullet;
 var tiempoDisparo = 0;
 var TextoFinal;
 var arrayEnemigos = [];
+var arraybalas = [];
 var filas_enemigo=3;
 var columnas_enemigo=10;
 var control_tiempo=0;
+var contador_golpes_barrera=0;
+var tiempo_entre_golpes=0.075;
+var arrayColores = ["0x40FF00", "0xFF0040", "0x58ACFA", "0xF4FA58","0xE2A9F3","0xB43104","0xE6E6E6","0xFFFFFFF","0xFF00FF"];
 
 Game.Violento.prototype ={
-	init:function(edad, nave){
+	init:function(edad, nave, rebotes,P_violento,P_no_violento){
 		valor_edad=edad;
 		tipo_nave=nave;
+		rebote_bala=rebotes;
+		Puntuacion_violento=P_violento;
+		Puntuacion_no_violento=P_no_violento;
+		min_punutacion_violento=Puntuacion_violento[4].split('|');
 	},
 	
 	create:function(){
 		Tiempo_nave_alien=this.time.create();
 		Tiempo1=Tiempo_nave_alien.add(Phaser.Timer.SECOND * 5, this.moverNaveAlien);
 		Tiempo_nave_alien.start();
-
+		
 		puntuacion = 0;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.stage.backgroundColor = "Black";
@@ -53,7 +65,11 @@ Game.Violento.prototype ={
 		balasEnemigo.createMultiple(30, 'Bala_invaders');
 		balasEnemigo.setAll('anchor.x', 0.5);
 		balasEnemigo.setAll('anchor.y', 1);
-		balasEnemigo.setAll('outOfBoundsKill', true);
+		if(rebote_bala=='On'){
+			balasEnemigo.tiempo=0;
+		}else{
+			balasEnemigo.setAll('outOfBoundsKill', true);
+		}
 		balasEnemigo.setAll('checkWorldBounds', true);
 
 		balas_nave_alien = game.add.group();
@@ -64,6 +80,33 @@ Game.Violento.prototype ={
 		balas_nave_alien.setAll('anchor.y', 1);
 		balas_nave_alien.setAll('outOfBoundsKill', true);
 		balas_nave_alien.setAll('checkWorldBounds', true);
+		
+		Buff1 = game.add.group();
+		Buff1.enableBody = true;
+		Buff1.physicsBodyType = Phaser.Physics.ARCADE;
+		Buff1.createMultiple(5, 'buff1');
+		Buff1.setAll('anchor.x', 0.5);
+		Buff1.setAll('anchor.y', 1);
+		Buff1.setAll('outOfBoundsKill', true);
+		Buff1.setAll('checkWorldBounds', true);
+
+		Buff2 = game.add.group();
+		Buff2.enableBody = true;
+		Buff2.physicsBodyType = Phaser.Physics.ARCADE;
+		Buff2.createMultiple(1, 'buff2');
+		Buff2.setAll('anchor.x', 0.5);
+		Buff2.setAll('anchor.y', 1);
+		Buff2.setAll('outOfBoundsKill', true);
+		Buff2.setAll('checkWorldBounds', true);	
+
+		Buff3 = game.add.group();
+		Buff3.enableBody = true;
+		Buff3.physicsBodyType = Phaser.Physics.ARCADE;
+		Buff3.createMultiple(1, 'buff3');
+		Buff3.setAll('anchor.x', 0.5);
+		Buff3.setAll('anchor.y', 1);
+		Buff3.setAll('outOfBoundsKill', true);
+		Buff3.setAll('checkWorldBounds', true);		
 		
 		nave_alien = game.add.sprite(-50, -50, 'nave_alien');
 		game.physics.enable(nave_alien, Phaser.Physics.ARCADE);
@@ -203,8 +246,7 @@ Game.Violento.prototype ={
 		tween.onComplete.add(this.descend, this);
 	},	
 
-	update:function() {
-
+	update:function() {	
 		this.scale.pageAlignHorizontally = true;
 		this.scale.pageAlignVertically = true;
 		this.scale.refresh();		
@@ -290,13 +332,80 @@ Game.Violento.prototype ={
 			//colision de enemigos con nave
 			game.physics.arcade.overlap(enemigos, nave, this.collisionbar_player, null, this);
 			
+			//colision de buff1 con nave
+			game.physics.arcade.overlap(Buff1, nave, this.collisionbar_buff1, null, this);
+			//colision de buff2 con nave
+			game.physics.arcade.overlap(Buff2, nave, this.collisionbar_buff2, null, this);
+			//colision de buff3 con nave
+			game.physics.arcade.overlap(Buff3, nave, this.collisionbar_buff3, null, this);
+			
+			
 			//colision de nave con barreras
 			game.physics.arcade.overlap(barrera1, nave, this.collisionbar_nave, null, this);
 			game.physics.arcade.overlap(barrera2, nave, this.collisionbar_nave, null, this);
 			game.physics.arcade.overlap(barrera3, nave, this.collisionbar_nave, null, this);
 			game.physics.arcade.overlap(barrera4, nave, this.collisionbar_nave, null, this);
+
+			if(rebote_bala=='On'){
+				arraybalas.length=0;
+				balasEnemigo.forEachAlive(function(balasEnemigo){
+					//arrayEnemigos.push(enemigo);
+					arraybalas.push(balasEnemigo);
+				});
+				
+				for(i=0;i<arraybalas.length-1;i++){
+					arraybalas[i].tiempo++;
+					if(arraybalas[i].tiempo>300){
+						arraybalas[i].tiempo=0;
+						arraybalas[i].kill();
+					}
+					if(arraybalas[i].body.y>=550){
+						arraybalas[i].body.velocity.y = -200;
+						var randir=game.rnd.integerInRange(0,1);
+						if(randir==1){
+							arraybalas[i].body.velocity.x = 100;
+							
+						}else{
+							arraybalas[i].body.velocity.x = -100;
+						}
+						//Rotar sprite
+					};
+				}
+			}
 		}
 	},
+
+	collisionbar_buff1:function(nave, Buff1){
+		Buff1.kill();
+		puntuacion=puntuacion+500;
+		TextoPuntuacion.text = TextoPuntos + puntuacion;
+	},	
+
+	collisionbar_buff2:function(nave, Buff2){
+		Buff2.kill();
+		
+		barrera1.revive();
+		barrera1.vida=4;
+		barrera1.loadTexture('Barrera1');
+		
+		barrera2.revive();
+		barrera2.vida=4;
+		barrera2.loadTexture('Barrera1');
+		
+		barrera3.revive();
+		barrera3.vida=4;
+		barrera3.loadTexture('Barrera1');
+		
+		barrera4.revive();
+		barrera4.vida=4;
+		barrera4.loadTexture('Barrera1');
+	},	
+	
+	
+	collisionbar_buff3:function(nave, Buff3){
+		Buff3.kill();
+	},	
+
 	
 	collisionbar_nave:function(barrera, nave){
 		barrera.kill();
@@ -316,10 +425,15 @@ Game.Violento.prototype ={
 			nave.kill();
 			balasEnemigo.callAll('kill');
 
-			TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
-			TextoFinal.visible = true;
-
-			game.input.onTap.addOnce(this.Volver_menu,this);
+			if(min_punutacion_violento[1]<puntuacion){
+				TextoFinal.text=" GAME OVER \n Nuevo RECORD\n al menu";
+				TextoFinal.visible = true;
+				game.input.onTap.addOnce(this.Guardar_puntos,this);
+			}else{
+				TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
+				TextoFinal.visible = true;
+				game.input.onTap.addOnce(this.Volver_menu,this);
+			}
 		}	
 	},
 
@@ -340,11 +454,16 @@ Game.Violento.prototype ={
 		var explosion = explosions.getFirstExists(false);
 		explosion.reset(nave.body.x +30, nave.body.y +30);
 		explosion.play('Explosion', 30, false, true);
-		
-		TextoFinal.text=" GAME OVER \n Click para volver al menu";
-		TextoFinal.visible = true;
 
-		game.input.onTap.addOnce(this.Volver_menu,this);
+		if(min_punutacion_violento[1]<puntuacion){
+			TextoFinal.text=" GAME OVER \n Nuevo RECORD\n al menu";
+			TextoFinal.visible = true;
+			game.input.onTap.addOnce(this.Guardar_puntos,this);
+		}else{
+			TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
+			TextoFinal.visible = true;
+			game.input.onTap.addOnce(this.Volver_menu,this);
+		}
 	},
 
 	enemyHitsPlayer:function (nave,bullet) {
@@ -366,14 +485,40 @@ Game.Violento.prototype ={
 			nave.kill();
 			balasEnemigo.callAll('kill');
 
-			TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
-			TextoFinal.visible = true;
-
-			game.input.onTap.addOnce(this.Volver_menu,this);
+			if(min_punutacion_violento[1]<puntuacion){
+				TextoFinal.text=" GAME OVER \n Nuevo RECORD\n al menu";
+				TextoFinal.visible = true;
+				game.input.onTap.addOnce(this.Guardar_puntos,this);
+			}else{
+				TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
+				TextoFinal.visible = true;
+				game.input.onTap.addOnce(this.Volver_menu,this);
+			}
 		}
 	},
 	
 	collisionbar:function(barrera, balasEnemigo){
+		if(contador_golpes_barrera==0){
+			tiempo_colision_balas=this.time.create();
+			Tiempo2=tiempo_colision_balas.add(Phaser.Timer.SECOND * tiempo_entre_golpes, this.control_colores);
+			tiempo_colision_balas.start();
+		}
+		contador_golpes_barrera+=1;
+		enemigos.forEachAlive(function(enemigo){
+			arrayEnemigos.push(enemigo);
+		});
+		if(contador_golpes_barrera==1){
+			var random=game.rnd.integerInRange(0,arrayColores.length-1);
+			for(i=0;i<arrayEnemigos.length;i++){
+				arrayEnemigos[i].tint=1 * arrayColores[random]
+			}
+		}
+		else{
+			for(i=0;i<arrayEnemigos.length;i++){
+				var random=game.rnd.integerInRange(0,arrayColores.length-1);
+				arrayEnemigos[i].tint=1 * arrayColores[random]
+			}
+		}
 		balasEnemigo.kill();
 		switch(barrera.vida){
 			case 4:
@@ -395,12 +540,39 @@ Game.Violento.prototype ={
 		}
 	},
 	
+	control_colores:function(){
+		contador_golpes_barrera=0;
+		tiempo_colision_balas.destroy();
+	},
+	
 	collisionHandler:function  (bullet, enemigo) {
-
-		bullet.kill();
-		enemigo.kill();
 		if(enemigo.tipo==0){
 			puntuacion += 100;
+			var random=game.rnd.integerInRange(0,20);
+			if(random==1){
+				buf1 = Buff1.getFirstExists(false);
+				if (buf1)
+				{
+					buf1.reset(enemigo.body.x, enemigo.body.y);
+					buf1.body.velocity.y = 200;
+				}
+			}
+			if(random==5){
+				buf2 = Buff2.getFirstExists(false);
+				if (buf2)
+				{
+					buf2.reset(enemigo.body.x, enemigo.body.y);
+					buf2.body.velocity.y = 200;
+				}
+			}
+			/*if(random==3){
+				buf3 = Buff3.getFirstExists(false);
+				if (buf3)
+				{
+					buf3.reset(enemigo.body.x, enemigo.body.y);
+					buf3.body.velocity.y = 200;
+				}
+			}*/
 		}else{
 			puntuacion += 500;
 			Tiempo_nave_alien=this.time.create();
@@ -408,6 +580,8 @@ Game.Violento.prototype ={
 			Tiempo_nave_alien.start();
 			control_tiempo=1;
 		}
+		bullet.kill();
+		enemigo.kill();
 		TextoPuntuacion.text = TextoPuntos + puntuacion;
 
 		var explosion = explosions.getFirstExists(false);
@@ -436,6 +610,11 @@ Game.Violento.prototype ={
 		});
 		if (enemyBullet && arrayEnemigos.length > 0)
 		{
+			if(rebote_bala=='On'){
+				enemyBullet.body.bounce.set(1);
+				enemyBullet.body.collideWorldBounds = true;
+				enemyBullet.tiempo=0;
+			}
 			var random=game.rnd.integerInRange(0,arrayEnemigos.length-1);
 			var shooter=arrayEnemigos[random];
 			enemyBullet.reset(shooter.body.x, shooter.body.y);
@@ -473,27 +652,15 @@ Game.Violento.prototype ={
 	},
 
 	Volver_menu: function  () {
-		this.state.start('MainMenu',true, false, valor_edad, tipo_nave);
+		this.state.start('MainMenu',true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento);
 	},
+	Guardar_puntos: function  () {
+		this.state.start('GuardarPuntosV',true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento, puntuacion);
+	},
+	
 	render:function() {
-		game.debug.text('normal baddies: ' + nave_alien.alive, 16, 60);
+		game.debug.text( "This:"+min_punutacion_violento[1], 100, 380 );
 	}
 }
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	

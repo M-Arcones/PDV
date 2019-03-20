@@ -43,10 +43,12 @@ Game.Edad.prototype ={
 	},
 
 	click_button:function(button){
+		var Puntuacion_violento=['...|5','...|4','...|3','...|2','...|1'];
+		var Puntuacion_no_violento=['...|5','...|4','...|3','...|2','...|1']
 		if(button.valor=='Mayor'){
-			this.state.start('MainMenu',true, false, 'Mayor','Nave1');
+			this.state.start('MainMenu',true, false, 'Mayor','Nave1', 'Off',Puntuacion_violento,Puntuacion_no_violento);
 		}else{
-			this.state.start('MainMenu',true, false, 'Menor','Nave1');
+			this.state.start('MainMenu',true, false, 'Menor','Nave1', 'Off',Puntuacion_violento,Puntuacion_no_violento);
 		}
 	},
 };

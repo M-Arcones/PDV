@@ -22,6 +22,9 @@ Game.Preloader.prototype={
 		this.load.image('bala_nave_alien', 'assets/sprites/bala_nave_alien.png');
 		this.load.image('Bala_nave', 'assets/sprites/bala_nave.png');
 		this.load.image('Explosion', 'assets/sprites/explosion.png');
+		this.load.image('buff1', 'assets/sprites/buff1.png');
+		this.load.image('buff2', 'assets/sprites/buff2.png');
+		this.load.image('buff3', 'assets/sprites/buff3.png');
 		this.load.image('Barrera1', 'assets/sprites/barrera1.png');
 		this.load.image('Barrera2', 'assets/sprites/barrera2.png');
 		this.load.image('Barrera3', 'assets/sprites/barrera3.png');

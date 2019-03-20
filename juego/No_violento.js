@@ -3,6 +3,7 @@ Game.No_Violento = function(game){
 
 var valor_edad;
 var tipo_nave;
+var rebote_bala;
 
 var nave;
 var enemigos;
@@ -16,9 +17,13 @@ var TextoPuntuacion;
 
 
 Game.No_Violento.prototype ={
-	init:function(edad, nave){
+	init:function(edad, nave, rebotes,P_violento,P_no_violento){
 		valor_edad=edad;
 		tipo_nave=nave;
+		rebote_bala=rebotes;
+		Puntuacion_violento=P_violento;
+		Puntuacion_no_violento=P_no_violento;
+		min_punutacion_violento=Puntuacion_violento[4].split('|');
 	},
 	
 	create:function(){
@@ -340,10 +345,15 @@ Game.No_Violento.prototype ={
 		{
 			nave.kill();
 
-			TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
-			TextoFinal.visible = true;
-
-			game.input.onTap.addOnce(this.Volver_menu,this);
+			if(min_punutacion_violento[1]<puntuacion){
+				TextoFinal.text=" GAME OVER \n Nuevo RECORD";
+				TextoFinal.visible = true;
+				game.input.onTap.addOnce(this.Guardar_puntos,this);
+			}else{
+				TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
+				TextoFinal.visible = true;
+				game.input.onTap.addOnce(this.Volver_menu,this);
+			}
 		}	
 	},
 
@@ -363,33 +373,21 @@ Game.No_Violento.prototype ={
 		explosion.play('Explosion', 30, false, true);
 		nave.kill();
 		
-		TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
-		TextoFinal.visible = true;
-
-		game.input.onTap.addOnce(this.Volver_menu,this);
+		if(min_punutacion_violento[1]<puntuacion){
+			TextoFinal.text=" GAME OVER \n Nuevo RECORD";
+			TextoFinal.visible = true;
+			game.input.onTap.addOnce(this.Guardar_puntos,this);
+		}else{
+			TextoFinal.text=" GAME OVER \n Click para volver\n al menu";
+			TextoFinal.visible = true;
+			game.input.onTap.addOnce(this.Volver_menu,this);
+		}
 	},
-
-
+	
 	Volver_menu: function  () {
-		this.state.start('MainMenu',true, false, valor_edad, tipo_nave);		
+		this.state.start('MainMenu',true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento);
+	},
+	Guardar_puntos: function  () {
+		this.state.start('GuardarPuntosNoV',true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento, puntuacion);
 	}
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

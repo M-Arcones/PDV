@@ -1,10 +1,20 @@
 Game.Tutorial_No_Violento = function(game){
 };
 var valor_edad;
+var tipo_nave;
+var rebote_bala;
+var Puntuacion_violento;
+var Puntuacion_no_violento;
+
 Game.Tutorial_No_Violento.prototype ={
-	init:function(edad){
+	init:function(edad, nave, rebotes,P_violento,P_no_violento){
 		valor_edad=edad;
+		tipo_nave=nave;
+		rebote_bala=rebotes;
+		Puntuacion_violento=P_violento;
+		Puntuacion_no_violento=P_no_violento;
 	},
+	
 	create:function(){
 		this.seleccion;
 		/*this.game.physics.p2.gravity.y = 0;*/
@@ -32,6 +42,6 @@ Game.Tutorial_No_Violento.prototype ={
 	},
 
 	click_button:function(button){
-		this.state.start(button.stage,true, false, valor_edad, tipo_nave);
+		this.state.start(button.stage,true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento);
 	},
 };
