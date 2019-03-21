@@ -162,7 +162,7 @@ Game.GuardarPuntosNoV.prototype ={
 			switch(position){
 				case 0:
 					if(cont1==24){
-						cont1=1;
+						cont1=0;
 					}else{
 						cont1++;
 					}
@@ -170,7 +170,7 @@ Game.GuardarPuntosNoV.prototype ={
 				break;
 				case 1:
 					if(cont2==24){
-						cont2=1;
+						cont2=0;
 					}else{
 						cont2++;
 					}
@@ -178,7 +178,7 @@ Game.GuardarPuntosNoV.prototype ={
 				break;
 				case 2:
 					if(cont3==24){
-						cont3=1;
+						cont3=0;
 					}else{
 						cont3++;
 					}
