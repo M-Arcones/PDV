@@ -24,9 +24,21 @@ Game.Tutorial_Violento.prototype ={
 						boundsAlignV: "middle",
 					};
 					
-		this.text2=this.game.add.text(0, 0, "Introducir aqui el texto del \ntutorial violento.",style);
+        this.background = this.add.image(0, 0, "fondo");
+        this.background.height = this.game.height;
+        this.background.width = this.game.width;
+		
+		this.text2=this.game.add.text(10, 50, "Objetivo: \nEliminar el mayor numero\n de aliens\n\nControles:\nDispara: Tecla espacio\nMover nave: Teclas de direccion\n\nBuffs:\n Repara Barreras\n Suma 500 Puntos",style);
 		this.text2.font = 'Press Start 2P';
 		this.text2.setTextBounds(0, 100, this.game.world.width,100);
+		
+		
+		this.img_buff1=this.add.sprite(22, 343, 'buff1');
+		this.img_buff1.scale.setTo(2, 2);
+		this.img_buff2=this.add.sprite(22, 312, 'buff2');
+		this.img_buff2.scale.setTo(2, 2);
+		
+		
 		
 		this.button_volver = this.add.button(this.world.centerX - 160, 405, 'Boton', this.click_button, this, 2, 1, 0);
 		this.button_volver.scale.setTo(1.4, 0.9);

@@ -23,9 +23,9 @@ Game.Settings.prototype ={
 						boundsAlignH: "center",
 						boundsAlignV: "middle",
 					};
-        /*this.background = this.add.image(0, 0, "fondoMenu");
+        this.background = this.add.image(0, 0, "fondo");
         this.background.height = this.game.height;
-        this.background.width = this.game.width;*/
+        this.background.width = this.game.width;
 		this.stage.backgroundColor = "Black";
 		if(valor_edad=='Mayor'){
 			this.button_rebote_balas = this.add.button(this.world.centerX - 280, 55, 'Boton', this.act_rebote, this, 2, 1, 0);

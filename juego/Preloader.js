@@ -5,11 +5,11 @@ Game.Preloader = function(game){
 Game.Preloader.prototype={
 	preload:function(){
 		//Musica
-		/*this.load.audio('menuMusic','assets/Sounds/MusicaInicioJuego_Menu.mp3');
-		this.load.audio('batallaMusic','assets/Sounds/MusicaGameplay.mp3');*/
+		/*this.load.audio('GopeMetal','assets/Sounds/MetalHit.mp3');*/
+		/*this.load.audio('batallaMusic','assets/Sounds/MusicaGameplay.mp3');*/
 
 		//Menu Images
-		/*this.load.image("fondoMenu", 'assets/Backgrounds/fondoMenu.png');*/
+		this.load.image("fondoMain", 'assets/Backgrounds/fondoMain.png');
 		
 		//Game Images
 		
@@ -34,10 +34,10 @@ Game.Preloader.prototype={
 		this.load.spritesheet('invader3', 'assets/sprites/invader3.png', 52, 52, 2);
 		this.load.spritesheet('nave_alien', 'assets/sprites/nave_alien.png', 192, 85, 2);
 		
-        /*this.background = this.add.image(0, 0, "preloader_fondo");
+        this.background = this.add.image(0, 0, "fondo");
         this.background.height = this.game.height;
-        this.background.width = this.game.width;*/
-		this.stage.backgroundColor = "Black";
+        this.background.width = this.game.width;
+		/*this.stage.backgroundColor = "Black";*/
 		
 		this.preloadBar=this.add.sprite(this.world.centerX,this.world.centerY + this.world.centerY/2,'preloader_bar');
 		this.preloadBar.anchor.setTo(0.5,0.5);

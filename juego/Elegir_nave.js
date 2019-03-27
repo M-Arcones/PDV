@@ -22,7 +22,9 @@ Game.Elegir_nave.prototype ={
 						boundsAlignH: "center",
 						boundsAlignV: "middle",
 					};
-		/*this.game.physics.p2.gravity.y = 0;*/
+        this.background = this.add.image(0, 0, "fondo");
+        this.background.height = this.game.height;
+        this.background.width = this.game.width;
 		
         this.button_nave1 = this.add.button(this.world.centerX - 370, 105, 'Boton', this.selec_nave, this, 2, 1, 0);
 		this.button_nave1.scale.setTo(1, 2);

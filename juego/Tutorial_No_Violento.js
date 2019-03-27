@@ -23,8 +23,11 @@ Game.Tutorial_No_Violento.prototype ={
 						boundsAlignH: "center",
 						boundsAlignV: "middle",
 					};
+        this.background = this.add.image(0, 0, "fondo");
+        this.background.height = this.game.height;
+        this.background.width = this.game.width;
 					
-		this.text2=this.game.add.text(0, 0, "Introducir aqui el texto del \ntutorial no violento.",style);
+		this.text2=this.game.add.text(10, 50, "Objetivo: \nEsquivar el mayor numero \nde aliens posibles.\nCada fila de aliens superada \nsumara 100 puntos\n\nControles:\nMover nave: Teclas de direccion",style);
 		this.text2.font = 'Press Start 2P';
 		this.text2.setTextBounds(0, 100, this.game.world.width,100);
 		

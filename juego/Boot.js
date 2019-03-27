@@ -9,8 +9,8 @@ Game.Boot = function(game){
 Game.Boot.prototype = {
 	
 	preload:function(){
-		/*this.load.image('preloader_fondo','assets/Backgrounds/FondoPreload.png');
-		this.load.image('preloader_bar','assets/Backgrounds/BarraCarga.png');*/
+		this.load.image('fondo','assets/Backgrounds/fondo.png');
+		/*this.load.image('preloader_bar','assets/Backgrounds/BarraCarga.png');*/
 	},
 	
 	create:function(){

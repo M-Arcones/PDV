@@ -11,9 +11,9 @@ Game.Edad.prototype ={
 						boundsAlignH: "center",
 						boundsAlignV: "middle",
 					};
-        /*this.background = this.add.image(0, 0, "fondoMenu");
+        this.background = this.add.image(0, 0, "fondoMain");
         this.background.height = this.game.height;
-        this.background.width = this.game.width;*/
+        this.background.width = this.game.width;
 		this.stage.backgroundColor = "Black";
 		
 		this.button_menor = this.add.button(this.world.centerX - 200, 305, 'Boton', this.click_button, this, 2, 1, 0);

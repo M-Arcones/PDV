@@ -23,10 +23,9 @@ Game.PuntuacionesNoV.prototype ={
 						boundsAlignH: "center",
 						boundsAlignV: "middle",
 					};
-        /*this.background = this.add.image(0, 0, "fondoMenu");
+        this.background = this.add.image(0, 0, "fondo");
         this.background.height = this.game.height;
-        this.background.width = this.game.width;*/
-		this.stage.backgroundColor = "Black";
+        this.background.width = this.game.width;
 		
 		cursors = game.input.keyboard.createCursorKeys();
 
