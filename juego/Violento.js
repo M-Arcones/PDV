@@ -30,6 +30,8 @@ var control_tiempo=0;
 var contador_golpes_barrera=0;
 var tiempo_entre_golpes=0.075;
 var arrayColores = ["0x40FF00", "0xFF0040", "0x58ACFA", "0xF4FA58","0xE2A9F3","0xB43104","0xE6E6E6","0xFFFFFFF","0xFF00FF"];
+var contMusica=0;
+var arrayMusica=[];
 
 Game.Violento.prototype ={
 	init:function(edad, nave, rebotes,P_violento,P_no_violento){
@@ -42,6 +44,26 @@ Game.Violento.prototype ={
 	},
 	
 	create:function(){
+		//Audio
+		invaderkilled=game.add.audio('invaderkilled');
+		shoot_player=game.add.audio('shoot_player');
+		hit_player=game.add.audio('hit_player');
+		shoot_ship=game.add.audio('shoot_ship');
+		golpe_barrera=game.add.audio('golpe_barrera');
+		ship_move=game.add.audio('ship_move');
+		destroy_ship=game.add.audio('destroy_ship');
+		shot_invader=game.add.audio('shot_invader');
+		drop=game.add.audio('drop');
+		
+		//Musica
+		arrayMusica[0]=game.add.audio('Musica1');
+		arrayMusica[1]=game.add.audio('Musica2');
+		arrayMusica[2]=game.add.audio('Musica3');
+		arrayMusica[3]=game.add.audio('Musica4');
+		arrayMusica[4]=game.add.audio('Musica5');
+		this.time.events.loop(Phaser.Timer.SECOND*20, this.cambiar_musica, this);
+		arrayMusica[contMusica].play()
+		
 		Tiempo_nave_alien=this.time.create();
 		Tiempo1=Tiempo_nave_alien.add(Phaser.Timer.SECOND * 5, this.moverNaveAlien);
 		Tiempo_nave_alien.start();
@@ -177,6 +199,15 @@ Game.Violento.prototype ={
 		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	},
 	
+	cambiar_musica: function(){
+		arrayMusica[contMusica].stop();
+		contMusica++;
+		if(contMusica==5){
+			contMusica=0;
+		}
+		arrayMusica[contMusica].play();
+	},
+	
 	moverNaveAlien:function(){
 		if(nave_alien.alive==false){
 			nave_alien.revive();
@@ -185,6 +216,7 @@ Game.Violento.prototype ={
 		nave_alien.x = -10;
 		nave_alien.y = 10;
 		control_tiempo=0;
+		ship_move.play();
 	},
 	
 	IniciarEnemigos:function() {
@@ -262,7 +294,7 @@ Game.Violento.prototype ={
 				Tiempo_nave_alien.start();
 				control_tiempo=1;
 			}
-			nave_alien.body.velocity.x = 200;
+			nave_alien.body.velocity.x = 310;
 			nave.body.velocity.setTo(0, 0);
 
 			if (cursors.left.isDown)
@@ -380,12 +412,14 @@ Game.Violento.prototype ={
 
 	collisionbar_buff1:function(nave, Buff1){
 		Buff1.kill();
+		drop.play();
 		puntuacion=puntuacion+500;
 		TextoPuntuacion.text = TextoPuntos + puntuacion;
 	},	
 
 	collisionbar_buff2:function(nave, Buff2){
 		Buff2.kill();
+		drop.play();
 		
 		barrera1.revive();
 		barrera1.vida=4;
@@ -406,12 +440,17 @@ Game.Violento.prototype ={
 	
 	
 	collisionbar_buff3:function(nave, Buff3){
+		var random=game.rnd.integerInRange(0,750);
+		nave.body.x=random+20;
+		drop.play();
 		Buff3.kill();
 	},	
 
 	
 	collisionbar_nave:function(barrera, nave){
+		golpe_barrera.play();
 		barrera.kill();
+		hit_player.play();
 
 		live = vidas.getFirstAlive();
 		if (live)
@@ -427,7 +466,7 @@ Game.Violento.prototype ={
 		{
 			nave.kill();
 			balasEnemigo.callAll('kill');
-
+			arrayMusica[contMusica].stop();
 			if(min_punutacion_violento[1]<puntuacion){
 				TextoFinal.text=" GAME OVER \n Nuevo RECORD\n al menu";
 				TextoFinal.visible = true;
@@ -445,6 +484,7 @@ Game.Violento.prototype ={
 	},
 	
 	collisionbar_player:function(nave, enemigos){
+		hit_player.play();
 		do{
 			live = vidas.getFirstAlive();
 			if (live)
@@ -458,6 +498,7 @@ Game.Violento.prototype ={
 		explosion.reset(nave.body.x +30, nave.body.y +30);
 		explosion.play('Explosion', 30, false, true);
 
+		arrayMusica[contMusica].stop();
 		if(min_punutacion_violento[1]<puntuacion){
 			TextoFinal.text=" GAME OVER \n Nuevo RECORD\n al menu";
 			TextoFinal.visible = true;
@@ -472,7 +513,7 @@ Game.Violento.prototype ={
 	enemyHitsPlayer:function (nave,bullet) {
 		
 		bullet.kill();
-
+		hit_player.play();
 		live = vidas.getFirstAlive();
 		if (live)
 		{
@@ -487,7 +528,7 @@ Game.Violento.prototype ={
 		{
 			nave.kill();
 			balasEnemigo.callAll('kill');
-
+			arrayMusica[contMusica].stop();
 			if(min_punutacion_violento[1]<puntuacion){
 				TextoFinal.text=" GAME OVER \n Nuevo RECORD\n al menu";
 				TextoFinal.visible = true;
@@ -501,6 +542,7 @@ Game.Violento.prototype ={
 	},
 	
 	collisionbar:function(barrera, balasEnemigo){
+		golpe_barrera.play();
 		if(contador_golpes_barrera==0){
 			tiempo_colision_balas=this.time.create();
 			Tiempo2=tiempo_colision_balas.add(Phaser.Timer.SECOND * tiempo_entre_golpes, this.control_colores);
@@ -550,6 +592,7 @@ Game.Violento.prototype ={
 	
 	collisionHandler:function  (bullet, enemigo) {
 		if(enemigo.tipo==0){
+			invaderkilled.play();
 			puntuacion += 100;
 			var random=game.rnd.integerInRange(0,20);
 			if(random==1){
@@ -568,15 +611,17 @@ Game.Violento.prototype ={
 					buf2.body.velocity.y = 200;
 				}
 			}
-			/*if(random==3){
+			if(random>18){
 				buf3 = Buff3.getFirstExists(false);
 				if (buf3)
 				{
 					buf3.reset(enemigo.body.x, enemigo.body.y);
 					buf3.body.velocity.y = 200;
 				}
-			}*/
+			}
 		}else{
+			ship_move.stop();
+			destroy_ship.play();
 			puntuacion += 500;
 			Tiempo_nave_alien=this.time.create();
 			Tiempo1=Tiempo_nave_alien.add(Phaser.Timer.SECOND * 20, this.moverNaveAlien);
@@ -613,6 +658,7 @@ Game.Violento.prototype ={
 		});
 		if (enemyBullet && arrayEnemigos.length > 0)
 		{
+			shot_invader.play();
 			if(rebote_bala=='On'){
 				enemyBullet.body.bounce.set(1);
 				enemyBullet.body.collideWorldBounds = true;
@@ -631,6 +677,7 @@ Game.Violento.prototype ={
 		Balas_nave_alien = balas_nave_alien.getFirstExists(false);
 		if (Balas_nave_alien && nave_alien.body.x < 650 && nave_alien.body.y==10 && nave_alien.alive)
 		{
+			shoot_ship.play();
 			Balas_nave_alien.reset(nave_alien.body.x+50, nave_alien.body.y);
 			Balas_nave_alien.body.velocity.y = 200;
 			tiempoDisparo = game.time.now + 300;
@@ -640,6 +687,7 @@ Game.Violento.prototype ={
 	fireBullet:function() {
 		if (game.time.now > bulletTime)
 		{
+			shoot_player.play();
 			bullet = balas.getFirstExists(false);
 			if (bullet)
 			{

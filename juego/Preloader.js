@@ -4,10 +4,24 @@ Game.Preloader = function(game){
 
 Game.Preloader.prototype={
 	preload:function(){
-		//Musica
-		/*this.load.audio('GopeMetal','assets/Sounds/MetalHit.mp3');*/
-		/*this.load.audio('batallaMusic','assets/Sounds/MusicaGameplay.mp3');*/
+		//Sonidos
+		this.load.audio('invaderkilled','assets/Sounds/invaderkilled.wav');
+		this.load.audio('shoot_player','assets/Sounds/shoot_player.wav');
+		this.load.audio('hit_player','assets/Sounds/explosion.wav');
+		this.load.audio('shoot_ship','assets/Sounds/shoot_ship.wav');
+		this.load.audio('golpe_barrera','assets/Sounds/golpe_barrera.wav');
+		this.load.audio('ship_move','assets/Sounds/ship_move.wav');
+		this.load.audio('destroy_ship','assets/Sounds/destroy_ship.mp3');
+		this.load.audio('drop','assets/Sounds/drop.mp3');
+		this.load.audio('shot_invader','assets/Sounds/shot_invader.mp3');
 
+		//Musica
+		this.load.audio('Musica1','assets/Sounds/Musica1.ogg');
+		this.load.audio('Musica2','assets/Sounds/Musica2.ogg');
+		this.load.audio('Musica3','assets/Sounds/Musica3.ogg');
+		this.load.audio('Musica4','assets/Sounds/Musica4.ogg');
+		this.load.audio('Musica5','assets/Sounds/Musica5.ogg');
+		
 		//Menu Images
 		this.load.image("fondoMain", 'assets/Backgrounds/fondoMain.png');
 		
