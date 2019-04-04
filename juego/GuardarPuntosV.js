@@ -213,6 +213,6 @@ Game.GuardarPuntosV.prototype ={
 	},	
 	
 	render:function() {
-		game.debug.text( "This:"+position, 100, 380 );
+		/*game.debug.text( "This:"+position, 100, 380 );*/
 	},
 };
