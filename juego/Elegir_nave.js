@@ -65,7 +65,7 @@ Game.Elegir_nave.prototype ={
 	this.button_volver.scale.setTo(1.4, 0.9);
 	this.button_volver.stage='Settings';
 	this.text2=this.game.add.text(0, 0, "Volver",style);
-	this.text2.font = 'Press Start';
+	this.text2.font = 'Press Start 2P';
 	this.text2.setTextBounds(0, 400, this.game.world.width,100);
 	},
 	update:function(){
