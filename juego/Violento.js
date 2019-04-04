@@ -710,7 +710,7 @@ Game.Violento.prototype ={
 	},
 	
 	render:function() {
-		game.debug.text( "This:"+min_punutacion_violento[1], 100, 380 );
+		/*game.debug.text( "This:"+min_punutacion_violento[1], 100, 380 );*/
 	}
 }
 
