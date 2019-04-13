@@ -14,7 +14,17 @@ var TextoFinal;
 var puntuacion = 0;
 var TextoPuntos = 'Puntos : ';
 var TextoPuntuacion;
+var tween;
+var tween1;
+var tween2;
+var tween3;
 
+
+var estado=0;
+var press=0;
+var silencio=0;
+var contMusica=0;
+var arrayMusica=[];
 
 Game.No_Violento.prototype ={
 	init:function(edad, nave, rebotes,P_violento,P_no_violento){
@@ -24,9 +34,23 @@ Game.No_Violento.prototype ={
 		Puntuacion_violento=P_violento;
 		Puntuacion_no_violento=P_no_violento;
 		min_punutacion_violento=Puntuacion_violento[4].split('|');
+		estado=0;
+		silencio=0;
 	},
 	
 	create:function(){
+		//Musica
+		arrayMusica[0]=game.add.audio('Musica1');
+		arrayMusica[1]=game.add.audio('Musica2');
+		arrayMusica[2]=game.add.audio('Musica3');
+		arrayMusica[3]=game.add.audio('Musica4');
+		arrayMusica[4]=game.add.audio('Musica5');
+		this.time.events.loop(Phaser.Timer.SECOND*20, this.cambiar_musica, this);
+		arrayMusica[contMusica].play();
+		if(silencio==1){
+			arrayMusica[contMusica].stop()
+		}
+
 		puntuacion = 0;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		/*this.stage.backgroundColor = "Black";*/
@@ -100,6 +124,28 @@ Game.No_Violento.prototype ={
 		explosions.forEach(this.setupInvader, this);
 
 		cursors = game.input.keyboard.createCursorKeys();
+		pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.P);
+		
+		//Menu pausa
+		Menu_pausa=this.add.sprite(200,200, 'Menu_pausa');
+		Menu_pausa.visible = false;
+		salir = this.add.button(220,250, 'salir', this.Volver_menu, this, 2, 1, 0);
+		salir.visible = false;
+		continuar = this.add.button(350,250, 'continuar', this.Continuar, this, 2, 1, 0);
+		continuar.visible = false;
+		silenciar = this.add.button(480,250, 'Sonido_SI', this.silenciar, this, 2, 1, 0);
+		silenciar.visible = false;
+	},
+	
+	cambiar_musica: function(){
+		arrayMusica[contMusica].stop();
+		contMusica++;
+		if(contMusica==5){
+			contMusica=0;
+		}
+		if(silencio==0){
+			arrayMusica[contMusica].play();
+		}
 	},
 	
 	createAliens:function() {
@@ -109,7 +155,7 @@ Game.No_Violento.prototype ={
 		enemigos3.y=0;
 		for (var y = 0; y < 4; y++)
 		{
-			var hueco = Math.ceil(Math.random() * (2 - 6) + 6);
+			var hueco = game.rnd.integerInRange(0,6);
 			for (var x = 0; x < 7; x++)
 			{
 				if(hueco!=x){
@@ -142,10 +188,10 @@ Game.No_Violento.prototype ={
 		/*enemigos.x = 10;
 		enemigos.y = 50;*/
 
-		var tween = game.add.tween(enemigos).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
-		var tween1 = game.add.tween(enemigos1).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
-		var tween2 = game.add.tween(enemigos2).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
-		var tween3 = game.add.tween(enemigos3).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween = game.add.tween(enemigos).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween1 = game.add.tween(enemigos1).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween2 = game.add.tween(enemigos2).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween3 = game.add.tween(enemigos3).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
 
 		tween.onComplete.add(this.descend, this);
 		tween1.onComplete.add(this.descend1, this);
@@ -164,20 +210,45 @@ Game.No_Violento.prototype ={
 	},
 	
 	descend:function() {
-		var tween = game.add.tween(enemigos).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween = game.add.tween(enemigos).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
 		tween.onComplete.add(this.descend, this);
 	},
 	descend1:function() {
-		var tween1 = game.add.tween(enemigos1).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween1 = game.add.tween(enemigos1).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
 		tween1.onComplete.add(this.descend1, this);
 	},
 	descend2:function() {
-		var tween2 = game.add.tween(enemigos2).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween2 = game.add.tween(enemigos2).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
 		tween2.onComplete.add(this.descend2, this);
 	},
 	descend3:function() {
-		var tween3 = game.add.tween(enemigos3).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
+		tween3 = game.add.tween(enemigos3).to( { x: 100 }, 1700, Phaser.Easing.Linear.None, true, 0, 0, true);
 		tween3.onComplete.add(this.descend3, this);
+	},
+
+	Continuar:function(){
+		//Continuar
+		Menu_pausa.visible = false;
+		salir.visible = false;
+		continuar.visible = false;
+		silenciar.visible = false;
+		estado=0;
+		tween.isPaused = false;
+		tween1.isPaused = false;
+		tween2.isPaused = false;
+		tween3.isPaused = false;
+	},	
+	
+	silenciar:function() {
+		if(silencio==1){
+			silencio=0;
+			arrayMusica[contMusica].resume();
+			silenciar.loadTexture('Sonido_SI');
+		}else{
+			silencio=1;
+			arrayMusica[contMusica].pause();
+			silenciar.loadTexture('Sonido_NO');
+		}
 	},
 	
 	update:function() {
@@ -185,10 +256,94 @@ Game.No_Violento.prototype ={
 		this.scale.pageAlignVertically = true;
 		this.scale.refresh();
 
-		enemigos.y += 1;
-		enemigos1.y += 1;
-		enemigos2.y += 1;
-		enemigos3.y += 1;
+		if (pauseKey.isDown && press==0)
+		{
+			press=1;
+			if(estado==0 && nave.alive){			
+				if(silencio==1){
+					silenciar.loadTexture('Sonido_NO');
+				}else{
+					silenciar.loadTexture('Sonido_SI');
+				}
+				//Pausar
+				Menu_pausa.visible = true;
+				salir.visible = true;
+				continuar.visible = true;
+				silenciar.visible = true;
+				estado=1;
+				tween.isPaused = true;
+				tween1.isPaused = true;
+				tween2.isPaused = true;
+				tween3.isPaused = true;
+				nave.body.velocity.x=0;
+				nave.body.velocity.y=0;
+
+			}else{
+				if(nave.alive){
+					this.Continuar();
+				}
+			}
+		}		
+		if(pauseKey.isDown==false){
+			press=0;
+		}
+		if(estado==0){
+			enemigos.y += 1;
+			enemigos1.y += 1;
+			enemigos2.y += 1;
+			enemigos3.y += 1;
+			if (nave.alive)
+			{
+				nave.body.velocity.setTo(0, 0);
+
+				if (cursors.left.isDown && nave.body.x>0)
+				{
+					nave.body.velocity.x = -300;
+				}
+				else if (cursors.right.isDown&& nave.body.x<800-nave.width )
+				{
+					nave.body.velocity.x = 300;
+				}
+				if (cursors.up.isDown)
+				{
+					nave.body.velocity.y = -300;
+				}
+				else if (cursors.down.isDown)
+				{
+					nave.body.velocity.y = 300;
+				}
+				
+				//colison de enemigos con barreras
+				game.physics.arcade.overlap(barrera1, enemigos, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera2, enemigos, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera3, enemigos, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera4, enemigos, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera1, enemigos1, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera2, enemigos1, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera3, enemigos1, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera4, enemigos1, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera1, enemigos2, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera2, enemigos2, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera3, enemigos2, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera4, enemigos2, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera1, enemigos3, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera2, enemigos3, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera3, enemigos3, this.collisionbar_ali, null, this);
+				game.physics.arcade.overlap(barrera4, enemigos3, this.collisionbar_ali, null, this);
+				
+				//colision de enemigos con nave
+				game.physics.arcade.overlap(enemigos, nave, this.collisionbar_player, null, this);
+				game.physics.arcade.overlap(enemigos1, nave, this.collisionbar_player, null, this);
+				game.physics.arcade.overlap(enemigos2, nave, this.collisionbar_player, null, this);
+				game.physics.arcade.overlap(enemigos3, nave, this.collisionbar_player, null, this);
+
+				//colision de nave con barreras
+				game.physics.arcade.overlap(barrera1, nave, this.collisionbar_nave, null, this);
+				game.physics.arcade.overlap(barrera2, nave, this.collisionbar_nave, null, this);
+				game.physics.arcade.overlap(barrera3, nave, this.collisionbar_nave, null, this);
+				game.physics.arcade.overlap(barrera4, nave, this.collisionbar_nave, null, this);
+			}
+		}
 		
 		if (enemigos.getAt(1).body.y >=640){
 			puntuacion += 100;
@@ -278,57 +433,6 @@ Game.No_Violento.prototype ={
 			}
 		}
 		TextoPuntuacion.text = TextoPuntos + puntuacion;
-		if (nave.alive)
-		{
-			nave.body.velocity.setTo(0, 0);
-
-			if (cursors.left.isDown && nave.body.x>0)
-			{
-				nave.body.velocity.x = -300;
-			}
-			else if (cursors.right.isDown&& nave.body.x<800-nave.width )
-			{
-				nave.body.velocity.x = 300;
-			}
-			if (cursors.up.isDown)
-			{
-				nave.body.velocity.y = -300;
-			}
-			else if (cursors.down.isDown)
-			{
-				nave.body.velocity.y = 300;
-			}
-			
-			//colison de enemigos con barreras
-			game.physics.arcade.overlap(barrera1, enemigos, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera2, enemigos, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera3, enemigos, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera4, enemigos, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera1, enemigos1, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera2, enemigos1, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera3, enemigos1, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera4, enemigos1, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera1, enemigos2, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera2, enemigos2, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera3, enemigos2, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera4, enemigos2, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera1, enemigos3, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera2, enemigos3, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera3, enemigos3, this.collisionbar_ali, null, this);
-			game.physics.arcade.overlap(barrera4, enemigos3, this.collisionbar_ali, null, this);
-			
-			//colision de enemigos con nave
-			game.physics.arcade.overlap(enemigos, nave, this.collisionbar_player, null, this);
-			game.physics.arcade.overlap(enemigos1, nave, this.collisionbar_player, null, this);
-			game.physics.arcade.overlap(enemigos2, nave, this.collisionbar_player, null, this);
-			game.physics.arcade.overlap(enemigos3, nave, this.collisionbar_player, null, this);
-
-			//colision de nave con barreras
-			game.physics.arcade.overlap(barrera1, nave, this.collisionbar_nave, null, this);
-			game.physics.arcade.overlap(barrera2, nave, this.collisionbar_nave, null, this);
-			game.physics.arcade.overlap(barrera3, nave, this.collisionbar_nave, null, this);
-			game.physics.arcade.overlap(barrera4, nave, this.collisionbar_nave, null, this);
-		}
 	},
 
 	collisionbar_nave:function(barrera, nave){
@@ -388,9 +492,11 @@ Game.No_Violento.prototype ={
 	},
 	
 	Volver_menu: function  () {
+		arrayMusica[contMusica].stop();
 		this.state.start('MainMenu',true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento);
 	},
 	Guardar_puntos: function  () {
+		arrayMusica[contMusica].stop();
 		this.state.start('GuardarPuntosNoV',true, false, valor_edad, tipo_nave, rebote_bala, Puntuacion_violento, Puntuacion_no_violento, puntuacion);
 	}
 }

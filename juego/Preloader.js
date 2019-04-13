@@ -47,6 +47,11 @@ Game.Preloader.prototype={
 		this.load.spritesheet('invader2', 'assets/sprites/invader2.png', 52, 52, 2);
 		this.load.spritesheet('invader3', 'assets/sprites/invader3.png', 52, 52, 2);
 		this.load.spritesheet('nave_alien', 'assets/sprites/nave_alien.png', 192, 85, 2);
+		this.load.spritesheet('Menu_pausa', 'assets/sprites/Menu_pausa.png', 400, 200);
+		this.load.spritesheet('salir', 'assets/sprites/salir.png', 100, 100);
+		this.load.spritesheet('continuar', 'assets/sprites/continuar.png', 100, 100);
+		this.load.spritesheet('Sonido_SI', 'assets/sprites/Sonido_SI.png', 100, 100);
+		this.load.spritesheet('Sonido_NO', 'assets/sprites/Sonido_NO.png', 100, 100);
 		
         this.background = this.add.image(0, 0, "fondo");
         this.background.height = this.game.height;
