@@ -28,25 +28,28 @@ Game.Tutorial_Violento.prototype ={
         this.background.height = this.game.height;
         this.background.width = this.game.width;
 		
-		this.text2=this.game.add.text(10, 50, "Objetivo: \nEliminar el mayor numero\n de aliens\n\nControles:\nDispara: Tecla espacio\nMover nave: Teclas de direccion\n\nBuffs:\n Repara Barreras\n Suma 500 Puntos\n Teletransporte aleatorio",style);
+		this.text2=this.game.add.text(10, 20, "Objetivo: \nEliminar el mayor numero\nde aliens\n\nControles:\nDispara: Tecla espacio\nMover nave: Teclas de direccion\nLaser: Tecla V\nMenu Pausa: Tecla P",style);
 		this.text2.font = 'Press Start 2P';
 		this.text2.setTextBounds(0, 100, this.game.world.width,100);
 		
+		this.text3=this.game.add.text(-62, 235, "Buffs:\n Repara Barreras\n Suma 500 Puntos\n Teletransporte aleatorio",style);
+		this.text3.font = 'Press Start 2P';
+		this.text3.setTextBounds(0, 100, this.game.world.width,100);
 		
-		this.img_buff1=this.add.sprite(22, 327, 'buff1');
+		this.img_buff1=this.add.sprite(22, 327+60, 'buff1');
 		this.img_buff1.scale.setTo(2, 2);
-		this.img_buff2=this.add.sprite(22, 298, 'buff2');
+		this.img_buff2=this.add.sprite(22, 298+60, 'buff2');
 		this.img_buff2.scale.setTo(2, 2);
-		this.img_buff3=this.add.sprite(22, 358, 'buff3');
+		this.img_buff3=this.add.sprite(22, 358+60, 'buff3');
 		this.img_buff3.scale.setTo(2, 2);
 		
 		
-		this.button_volver = this.add.button(this.world.centerX - 160, 425, 'Boton', this.click_button, this, 2, 1, 0);
+		this.button_volver = this.add.button(this.world.centerX - 160, 475, 'Boton', this.click_button, this, 2, 1, 0);
 		this.button_volver.scale.setTo(1.4, 0.9);
 		this.button_volver.stage='Settings';
 		this.text2=this.game.add.text(0, 0, "Volver",style);
 		this.text2.font = 'Press Start 2P';
-		this.text2.setTextBounds(0, 420, this.game.world.width,100);
+		this.text2.setTextBounds(0, 470, this.game.world.width,100);
 	},
 	update:function(){
 		this.scale.pageAlignHorizontally = true;

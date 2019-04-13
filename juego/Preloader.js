@@ -14,6 +14,7 @@ Game.Preloader.prototype={
 		this.load.audio('destroy_ship','assets/Sounds/destroy_ship.mp3');
 		this.load.audio('drop','assets/Sounds/drop.mp3');
 		this.load.audio('shot_invader','assets/Sounds/shot_invader.mp3');
+		this.load.audio('laser','assets/Sounds/ShotLaser.wav');
 
 		//Musica
 		this.load.audio('Musica1','assets/Sounds/Musica1.ogg');
@@ -52,6 +53,13 @@ Game.Preloader.prototype={
 		this.load.spritesheet('continuar', 'assets/sprites/continuar.png', 100, 100);
 		this.load.spritesheet('Sonido_SI', 'assets/sprites/Sonido_SI.png', 100, 100);
 		this.load.spritesheet('Sonido_NO', 'assets/sprites/Sonido_NO.png', 100, 100);
+		this.load.spritesheet('pila0', 'assets/sprites/pila0.png', 173, 79);
+		this.load.spritesheet('pila1', 'assets/sprites/pila1.png', 173, 79);
+		this.load.spritesheet('pila2', 'assets/sprites/pila2.png', 173, 79);
+		this.load.spritesheet('pila3', 'assets/sprites/pila3.png', 173, 79);
+		this.load.spritesheet('pila4', 'assets/sprites/pila4.png', 173, 79);
+		this.load.spritesheet('pila5', 'assets/sprites/pila5.png', 173, 79);
+		this.load.spritesheet('SuperDisparo', 'assets/sprites/SuperDisparo.png', 173, 79);
 		
         this.background = this.add.image(0, 0, "fondo");
         this.background.height = this.game.height;

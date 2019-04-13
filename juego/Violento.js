@@ -42,6 +42,12 @@ var estado=0;
 var press=0;
 var silencio=0;
 
+var tiempo_pila=0;
+var contador_pila=0;
+var constante_pila=500;
+var contSuperDisp=0;
+var existeLaser=0;
+
 Game.Violento.prototype ={
 	init:function(edad, nave, rebotes,P_violento,P_no_violento){
 		valor_edad=edad;
@@ -65,7 +71,7 @@ Game.Violento.prototype ={
 		destroy_ship=game.add.audio('destroy_ship');
 		shot_invader=game.add.audio('shot_invader');
 		drop=game.add.audio('drop');
-		
+		laser=game.add.audio('laser');
 		
 		//Musica
 		arrayMusica[0]=game.add.audio('Musica1');
@@ -213,6 +219,7 @@ Game.Violento.prototype ={
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.P);
+		SuperDisparo = game.input.keyboard.addKey(Phaser.Keyboard.V);
 		
 		//Menu pausa
 		Menu_pausa=this.add.sprite(200,200, 'Menu_pausa');
@@ -223,6 +230,11 @@ Game.Violento.prototype ={
 		continuar.visible = false;
 		silenciar = this.add.button(480,250, 'Sonido_SI', this.silenciar, this, 2, 1, 0);
 		silenciar.visible = false;
+		
+		//SuperDisparo
+		pila=this.add.sprite(400, 5, 'pila0');
+		pila.scale.setTo(0.4, 0.4);
+		
 	},
 	
 	cambiar_musica: function(){
@@ -423,8 +435,6 @@ Game.Violento.prototype ={
 					arraybalas_pausar[i].body.velocity.x=0;
 					arraybalas_pausar[i].body.velocity.y=0;
 				}
-				
-				
 			}else{
 				if(nave.alive){
 					this.Continuar();
@@ -438,6 +448,13 @@ Game.Violento.prototype ={
 		if(estado==0){
 			if (nave.alive)
 			{
+				contSuperDisp++;
+				tiempo_pila++;
+				if(tiempo_pila==constante_pila && contador_pila<5){
+					tiempo_pila=0;
+					contador_pila++;
+					pila.loadTexture("pila"+ contador_pila);
+				}
 				if(nave_alien.body.x>=650 && control_tiempo==0){
 					Tiempo_nave_alien=this.time.create();
 					Tiempo1=Tiempo_nave_alien.add(Phaser.Timer.SECOND * 10, this.moverNaveAlien);
@@ -447,6 +464,17 @@ Game.Violento.prototype ={
 				nave_alien.body.velocity.x = 310;
 				nave.body.velocity.setTo(0, 0);
 
+				if(contador_pila==5 && SuperDisparo.isDown){
+					contador_pila=0;
+					tiempo_pila=0;
+					pila.loadTexture("pila"+ contador_pila);
+					this.SDisparo();
+				}
+				if(existeLaser==1 && contSuperDisp>=5){
+					SuperDisp.destroy();
+					existeLaser=0;
+				}
+				
 				if (cursors.left.isDown)
 				{
 					nave.body.velocity.x = -200;
@@ -524,17 +552,27 @@ Game.Violento.prototype ={
 				//colision de buff3 con nave
 				game.physics.arcade.overlap(Buff3, nave, this.collisionbar_buff3, null, this);
 				
-				
 				//colision de nave con barreras
 				game.physics.arcade.overlap(barrera1, nave, this.collisionbar_nave, null, this);
 				game.physics.arcade.overlap(barrera2, nave, this.collisionbar_nave, null, this);
 				game.physics.arcade.overlap(barrera3, nave, this.collisionbar_nave, null, this);
 				game.physics.arcade.overlap(barrera4, nave, this.collisionbar_nave, null, this);
 
+				if(existeLaser==1){
+					//Colision de Laser con barreras
+					game.physics.arcade.overlap(barrera1, SuperDisp, this.collisionbar_laser, null, this);
+					game.physics.arcade.overlap(barrera2, SuperDisp, this.collisionbar_laser, null, this);
+					game.physics.arcade.overlap(barrera3, SuperDisp, this.collisionbar_laser, null, this);
+					game.physics.arcade.overlap(barrera4, SuperDisp, this.collisionbar_laser, null, this);
+
+					game.physics.arcade.overlap(SuperDisp, enemigos, this.collisionenm_laser, null, this);
+					game.physics.arcade.overlap(SuperDisp, nave_alien, this.collisionenm_laser, null, this);
+					
+				}
+				
 				if(rebote_bala=='On'){
 					arraybalas.length=0;
 					balasEnemigo.forEachAlive(function(balasEnemigo){
-						//arrayEnemigos.push(enemigo);
 						arraybalas.push(balasEnemigo);
 					});
 					
@@ -560,6 +598,7 @@ Game.Violento.prototype ={
 			}
 		}
 	},
+
 
 	collisionbar_buff1:function(nave, Buff1){
 		Buff1.kill();
@@ -704,7 +743,62 @@ Game.Violento.prototype ={
 			}
 		}
 	},
-	
+
+	collisionbar_laser:function(barrera, SuperDisp){
+		barrera.vida=0;
+		barrera.kill();
+	},
+
+	collisionenm_laser:function(SuperDisp, enemigo){
+		if(enemigo.tipo==0){
+			if(silencio==0){
+				invaderkilled.play();
+			}
+			puntuacion += 100;
+			var random=game.rnd.integerInRange(0,20);
+			if(random==1){
+				buf1 = Buff1.getFirstExists(false);
+				if (buf1)
+				{
+					buf1.reset(enemigo.body.x, enemigo.body.y);
+					buf1.body.velocity.y = 200;
+				}
+			}
+			if(random==5){
+				buf2 = Buff2.getFirstExists(false);
+				if (buf2)
+				{
+					buf2.reset(enemigo.body.x, enemigo.body.y);
+					buf2.body.velocity.y = 200;
+				}
+			}
+			if(random>18){
+				buf3 = Buff3.getFirstExists(false);
+				if (buf3)
+				{
+					buf3.reset(enemigo.body.x, enemigo.body.y);
+					buf3.body.velocity.y = 200;
+				}
+			}
+		}else{
+			ship_move.stop();
+			if(silencio==0){
+				destroy_ship.play();
+			}
+			puntuacion += 500;
+			Tiempo_nave_alien=this.time.create();
+			Tiempo1=Tiempo_nave_alien.add(Phaser.Timer.SECOND * 20, this.moverNaveAlien);
+			Tiempo_nave_alien.start();
+			control_tiempo=1;
+		}
+		enemigo.kill();
+		TextoPuntuacion.text = TextoPuntos + puntuacion;
+
+		var explosion = explosions.getFirstExists(false);
+		explosion.reset(enemigo.body.x +30, enemigo.body.y+30);
+		explosion.play('Explosion', 30, false, true);	
+	},
+
 	collisionbar:function(barrera, balasEnemigo){
 		if(silencio==0){
 			golpe_barrera.play();
@@ -805,18 +899,6 @@ Game.Violento.prototype ={
 		var explosion = explosions.getFirstExists(false);
 		explosion.reset(enemigo.body.x +30, enemigo.body.y+30);
 		explosion.play('Explosion', 30, false, true);
-
-/*		if (enemigos.countLiving() == 0)
-		{
-			puntuacion += 100;
-			TextoPuntuacion.text = TextoPuntos + puntuacion;
-
-			balasEnemigo.callAll('kill',this);
-			TextoFinal.text = " Ganaste, \n Puntuacion:" + puntuacion;
-			TextoFinal.visible = true;
-
-			game.input.onTap.addOnce(this.Volver_menu,this);
-		}*/
 	},
 
 	enemyFires:function() {
@@ -874,6 +956,16 @@ Game.Violento.prototype ={
 		}
 	},
 
+	SDisparo: function(){
+		if(silencio==0){
+			laser.play();
+		}
+		SuperDisp = game.add.sprite(nave.body.x+32, nave.body.y-600, 'SuperDisparo');
+		game.physics.enable(SuperDisp, Phaser.Physics.ARCADE);
+		contSuperDisp=0;
+		existeLaser=1;
+	},
+	
 	resetBullet:function(bullet) {
 		bullet.kill();
 	},
@@ -888,7 +980,7 @@ Game.Violento.prototype ={
 	},
 	
 	render:function() {
-		//game.debug.text( "This:"+Tiempo_nave_alien.duration.toFixed(0), 100, 380 );
+		game.debug.text( "This: "+contSuperDisp, 100, 380 );
 	}
 }
 
