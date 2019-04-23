@@ -122,6 +122,7 @@ Game.Violento.prototype ={
 		balas_nave_alien.enableBody = true;
 		balas_nave_alien.physicsBodyType = Phaser.Physics.ARCADE;
 		balas_nave_alien.createMultiple(35, 'bala_nave_alien');
+		balas_nave_alien.scale.setTo(1.1, 2);
 		balas_nave_alien.setAll('anchor.x', 0.5);
 		balas_nave_alien.setAll('anchor.y', 1);
 		balas_nave_alien.setAll('outOfBoundsKill', true);
