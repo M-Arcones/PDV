@@ -92,9 +92,15 @@ Game.Violento.prototype ={
 		puntuacion = 0;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		/*this.stage.backgroundColor = "Black";*/
-        this.background = this.add.image(0, 0, "fondo");
-        this.background.height = this.game.height;
-        this.background.width = this.game.width;
+		this.background = this.add.image(0, 0, "fondo");
+		this.background.height = this.game.height;
+		this.background.width = this.game.width;
+
+		existeLaser=0;
+		contSuperDisp=0;
+		tiempo_pila=0;
+		contador_pila=0;	
+		puntuacion = 0;
 
 		balas = game.add.group();
 		balas.enableBody = true;
